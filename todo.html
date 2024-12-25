@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>To-Do List</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+     <script src="data.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0b669;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .todo_header_btn {
+            padding: 10px 20px;
+            background-color: #23920d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .todo_header_btn:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .submit_btn {
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit_btn:hover {
+            background-color: #218838;
+        }
+
+        .todo_table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .todo_row {
+            display: grid;
+            grid-template-columns: 2fr 3fr 1fr 1fr;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .todo_title {
+            font-weight: bold;
+        }
+
+        .todo_data {
+            text-align: left;
+        }
+
+        .action_btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete_btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete_btn:hover {
+            background-color: #c82333;
+        }
+
+        .complete_btn {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .complete_btn:hover {
+            background-color: #e0a800;
+        }
+
+        .completed {
+            background-color: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="todo_header">
+            <h1>To-Do List</h1>
+            <button class="todo_header_btn" onclick="toggleForm()">Add Task</button>
+        </div>
+
+        <form id="taskForm">
+            <h2>New Task</h2>
+            <input type="text" id="taskTitle" placeholder="Name" required />
+            <input type="text" id="taskDesc" placeholder="Description" required />
+            <input type="text" id="taskDuration" placeholder="Duration" required />
+            <button type="submit" class="submit_btn">Submit</button>
+        </form>
+
+        <div class="todo_table" id="todoTable">
+            <div class="todo_row">
+                <div class="todo_title">Title</div>
+                <div class="todo_title">Description</div>
+                <div class="todo_title">Duration</div>
+                <div class="todo_title">Actions</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var taskForm = document.getElementById('taskForm');
+        var todoTable = document.getElementById('todoTable');
+
+        function toggleForm() {
+            taskForm.style.display = taskForm.style.display === 'none' || !taskForm.style.display ? 'flex' : 'none';
+        }
+
+        taskForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var title = document.getElementById('taskTitle').value;
+            var desc = document.getElementById('taskDesc').value;
+            var duration = document.getElementById('taskDuration').value;
+
+            addTask(title, desc, duration);
+            taskForm.reset();
+            toggleForm();
+        });
+
+        function addTask(title, desc, duration) {
+            var row = document.createElement('div');
+            row.className = 'todo_row';
+
+            row.innerHTML = `
+                <div class="todo_data">${title}</div>
+                <div class="todo_data">${desc}</div>
+                <div class="todo_data">${duration}</div>
+                <div class="todo_data">
+                    <button class="action_btn complete_btn" onclick="completeTask(this)">Complete</button>
+                    <button class="action_btn delete_btn" onclick="deleteTask(this)">Delete</button>
+                </div>
+            `;
+
+            todoTable.appendChild(row);
+        }
+
+        function deleteTask(button) {
+            var row = button.parentElement.parentElement;
+            todoTable.removeChild(row);
+        }
+
+        function completeTask(button) {
+            var row = button.parentElement.parentElement;
+            row.classList.add('completed');
+        }
+    </script>
+</body>
+</html>
